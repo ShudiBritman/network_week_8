@@ -4,7 +4,6 @@ from core.output_string import *
 def main():
     ip_address = get_valid_ip()
     subnet_mask = get_valid_mask()
-    print(ip_address, subnet_mask)
     f_ip = format_input_ip(ip_address)
     f_subnet_mask = format_subnet_mask(subnet_mask)
     network_address = get_network_address(ip_address, subnet_mask)

@@ -169,6 +169,10 @@ def get_amount_hosts(ip, mask):
     return hosts
 
 def write_to_file(data, ip):
-    with open(f"subnet_info_{ip}_325291052", "a") as f:
+    with open(f"subnet_info_{ip}_325291052.txt", "a") as f:
         for line in data:
             f.write(line)
+
+
+def check_type_class(mask):
+    pass
