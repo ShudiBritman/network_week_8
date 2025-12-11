@@ -94,3 +94,45 @@ def get_ip_address_mask():
     ip_address = get_valid_ip()
     mask = get_valid_mask()
     return [ip_address, mask]
+
+def get_network_address(bin_ip, bin_mask):
+    length = 32
+
+    cut_index = bin_mask.find("0")
+    if cut_index != -1:
+        network_prefix = bin_ip[:cut_index]
+        network_prefix = binary_to_dot_decimal(network_prefix) 
+    else:
+        network_prefix = 0
+    return network_prefix
+
+def binary_to_dot_decimal(binary_string: str):
+    octets = []
+    for i in range(0, 32, 8):
+        octet_binary = binary_string[i:i+8]
+        octet_decimal = binary_to_decimal(octet_binary)
+        octets.append(str(octet_decimal))
+        
+    return ".".join(octets)
+
+def binary_to_decimal(binary_string: str):
+    decimal_val = 0
+    n = len(binary_string)
+    for i, bit in enumerate(binary_string):
+        if bit == '1':
+            power = n - 1 - i
+            decimal_val += (2 ** power)
+    return decimal_val
+
+def get_broadcast_address(bin_ip, bin_mask):
+    length = 32
+    cut_index =  bin_ip.find('0')
+    if cut_index != -1:
+        host_bits = length - cut_index
+    else:
+        host_bits = 0 
+    network_prefix = get_network_address(bin_ip, bin_mask)
+    host_suffix_one = '1' * host_bits
+    broadcast_binary = network_prefix + host_suffix_one
+    broadcast_dec = binary_to_dot_decimal(broadcast_binary)
+    return broadcast_dec
