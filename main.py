@@ -12,8 +12,10 @@ def main():
     f_broadcast_address = format_broadcast_address(broadcast_address)
     num_hosts = get_amount_hosts(ip_address, subnet_mask)
     f_num_hosts = format_num_hosts(num_hosts)
+    type_class = check_type_class(subnet_mask)
+    f_type_class = format_classful_status(type_class)
     data = f_ip, f_subnet_mask, f_network_address, \
-    f_broadcast_address, f_num_hosts
+    f_broadcast_address, f_num_hosts, f_type_class
     write_to_file(data, ip_address)
 
 

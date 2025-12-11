@@ -175,4 +175,16 @@ def write_to_file(data, ip):
 
 
 def check_type_class(mask):
-    pass
+    count = 0
+    mask = mask.split(".")
+    for octet in mask:
+        if octet == "255":
+            count += 1
+    if count == 1:
+        return "class a"
+    elif count == 2:
+        return "class b"
+    elif count == 3:
+        return "class c"
+    else:
+        return "class full"

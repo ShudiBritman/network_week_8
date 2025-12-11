@@ -3,3 +3,8 @@ Subnet Mask: 255.255.255.192
 Network Address: 192.168.10.2
 Broadcast Address: 192.168.10.191
 Number of Hosts in this subnet: 62
+Input IP: 192.168.10.130
+Subnet Mask: 255.255.255.192
+Network Address: 192.168.10.2
+Broadcast Address: 192.168.10.191
+Number of Hosts in this subnet: 62
