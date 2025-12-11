@@ -94,6 +94,3 @@ def get_ip_address_mask():
     ip_address = get_valid_ip()
     mask = get_valid_mask()
     return [ip_address, mask]
-
-x = get_ip_address_mask()
-print(x)
