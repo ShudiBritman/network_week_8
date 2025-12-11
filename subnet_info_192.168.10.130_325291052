@@ -1,0 +1,5 @@
+Input IP: 192.168.10.130
+Subnet Mask: 255.255.255.0
+Network Address: 192.168.10.0
+Broadcast Address: 192.168.10.255
+Number of Hosts in this subnet: 253

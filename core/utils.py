@@ -37,7 +37,7 @@ def get_valid_mask():
         valid_mask = validate_mask(bin_mask)
         if not valid_mask:
             print("Please enter a valid mask")
-    return bin_mask
+    return mask
 
 def change_dec_mask_to_bin(mask):
     mask = mask.split(".")
@@ -90,21 +90,28 @@ def validate_all_once_or_zeroes(mask):
         return False
     return True
 
-def get_ip_address_mask():
-    ip_address = get_valid_ip()
-    mask = get_valid_mask()
-    return [ip_address, mask]
-
-def get_network_address(bin_ip, bin_mask):
+def get_network_address(ip, mask, bin=False):
+    bin_ip = dot_dec_to_bin(ip)
+    bin_mask = dot_dec_to_bin(mask)
     length = 32
-
     cut_index = bin_mask.find("0")
     if cut_index != -1:
-        network_prefix = bin_ip[:cut_index]
-        network_prefix = binary_to_dot_decimal(network_prefix) 
+        bin_network_prefix = bin_ip[:cut_index]
+        dec_network_prefix = binary_to_dot_decimal(bin_network_prefix)
     else:
-        network_prefix = 0
-    return network_prefix
+        bin_network_prefix = 0
+        dec_network_prefix = 0
+    if bin:
+        return bin_network_prefix
+    return dec_network_prefix
+
+def dot_dec_to_bin(ip_address):
+    octets = ip_address.split('.')
+    binary_ip = ""
+    for octet in octets:
+        decimal_octet = int(octet)
+        binary_ip += dec_to_bin(decimal_octet, 8)
+    return binary_ip
 
 def binary_to_dot_decimal(binary_string: str):
     octets = []
@@ -124,15 +131,44 @@ def binary_to_decimal(binary_string: str):
             decimal_val += (2 ** power)
     return decimal_val
 
-def get_broadcast_address(bin_ip, bin_mask):
+def get_broadcast_address(ip, mask):
+    bin_mask = dot_dec_to_bin(mask)
     length = 32
-    cut_index =  bin_ip.find('0')
+    cut_index =  bin_mask.find('0')
     if cut_index != -1:
         host_bits = length - cut_index
     else:
         host_bits = 0 
-    network_prefix = get_network_address(bin_ip, bin_mask)
+    network_prefix = get_network_address(ip, mask, bin=True)
     host_suffix_one = '1' * host_bits
     broadcast_binary = network_prefix + host_suffix_one
     broadcast_dec = binary_to_dot_decimal(broadcast_binary)
     return broadcast_dec
+
+def get_amount_hosts(ip, mask):
+    bin_mask = dot_dec_to_bin(mask)
+    length = 32
+    cut_index =  bin_mask.find('0')
+    if cut_index != -1:
+        host_bits = length - cut_index
+    else:
+        host_bits = 0 
+    if host_bits <= 1:
+        hosts = 0
+    elif host_bits < 8:
+        hosts = (2 ** host_bits) - 2
+    elif host_bits < 16:
+        third_octet = host_bits - 8
+        hosts = ((2 ** third_octet) * 255) - 2
+    elif host_bits < 24:
+        second_octet = host_bits - 16
+        hosts = ((2 ** second_octet) * (255 ** 2)) - 2
+    else:
+        first_octet = host_bits - 24
+        hosts = ((2 ** first_octet) * (255 ** 3)) - 2
+    return hosts
+
+def write_to_file(data, ip):
+    with open(f"subnet_info_{ip}_325291052", "a") as f:
+        for line in data:
+            f.write(line)
